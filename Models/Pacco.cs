@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-//using System.Data.Entity;
+using System.Data.Entity;
 
 namespace MAEPacchi.Models
 {
@@ -15,8 +15,8 @@ namespace MAEPacchi.Models
         public string Note { get; set; }
         public decimal Price { get; set; }
     }
-    //public class MovieDBContext : DbContext
-    //{
-    //    public DbSet<Movie> Movies { get; set; }
-    //}
+    public class PaccoDBContext : DbContext
+    {
+        public DbSet<Pacco> Pacchi { get; set; }
+    }
 }

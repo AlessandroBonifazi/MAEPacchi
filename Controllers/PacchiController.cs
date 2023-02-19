@@ -1,26 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MAEPacchi.Models;
 
 namespace MAEPacchi.Controllers
 {
     public class PacchiController : Controller
     {
+        private PaccoDBContext db = new PaccoDBContext();
+
         // GET: Pacchi
         public ActionResult Index()
         {
-            ViewBag.NSpedizioni = 5;
-            ViewBag.codSpedizione = "ABC123";
-            return View();
+            return View(db.Pacchi.ToList());
         }
 
         // GET: Pacchi/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Pacco pacco = db.Pacchi.Find(id);
+            if (pacco == null)
+            {
+                return HttpNotFound();
+            }
+            return View(pacco);
         }
 
         // GET: Pacchi/Create
@@ -30,63 +42,86 @@ namespace MAEPacchi.Controllers
         }
 
         // POST: Pacchi/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "ID,Sender,Recipient,Date,Note,Price")] Pacco pacco)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
+                db.Pacchi.Add(pacco);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(pacco);
         }
 
         // GET: Pacchi/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Pacco pacco = db.Pacchi.Find(id);
+            if (pacco == null)
+            {
+                return HttpNotFound();
+            }
+            return View(pacco);
         }
 
         // POST: Pacchi/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "ID,Sender,Recipient,Date,Note,Price")] Pacco pacco)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.Entry(pacco).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(pacco);
         }
 
         // GET: Pacchi/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Pacco pacco = db.Pacchi.Find(id);
+            if (pacco == null)
+            {
+                return HttpNotFound();
+            }
+            return View(pacco);
         }
 
         // POST: Pacchi/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            Pacco pacco = db.Pacchi.Find(id);
+            db.Pacchi.Remove(pacco);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
-                return RedirectToAction("Index");
-            }
-            catch
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                return View();
+                db.Dispose();
             }
+            base.Dispose(disposing);
         }
     }
 }

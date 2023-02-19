@@ -184,6 +184,10 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Pacchi\Index.cshtml" />
+    <Content Include="Views\Pacchi\Create.cshtml" />
+    <Content Include="Views\Pacchi\Delete.cshtml" />
+    <Content Include="Views\Pacchi\Details.cshtml" />
+    <Content Include="Views\Pacchi\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
