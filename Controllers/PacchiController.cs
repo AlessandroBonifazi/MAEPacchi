@@ -15,9 +15,16 @@ namespace MAEPacchi.Controllers
         private PaccoDBContext db = new PaccoDBContext();
 
         // GET: Pacchi
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
-            return View(db.Pacchi.ToList());
+            var pacchi = from m in db.Pacchi
+                         select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                pacchi = pacchi.Where(s => s.Sender.Contains(searchString));
+            }
+            return View(pacchi);
         }
 
         // GET: Pacchi/Details/5
