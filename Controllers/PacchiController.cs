@@ -32,7 +32,7 @@ namespace MAEPacchi.Controllers
             //Parameter check
             if (!String.IsNullOrEmpty(searchString))
             {
-                pacchi = pacchi.Where(s => s.Sender.Contains(searchString));
+                pacchi = pacchi.Where(s => s.Sender.Contains(searchString) || s.Recipient.Contains(searchString));
             }
             if (!string.IsNullOrEmpty(deliveryType))
             {

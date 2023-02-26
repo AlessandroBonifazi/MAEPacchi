@@ -133,6 +133,10 @@
     <Compile Include="Migrations\202302261740217_Initial.designer.cs">
       <DependentUpon>202302261740217_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302261810424_DataAnnotations.cs" />
+    <Compile Include="Migrations\202302261810424_DataAnnotations.designer.cs">
+      <DependentUpon>202302261810424_DataAnnotations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Pacco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -227,6 +231,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202302261740217_Initial.resx">
       <DependentUpon>202302261740217_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302261810424_DataAnnotations.resx">
+      <DependentUpon>202302261810424_DataAnnotations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
