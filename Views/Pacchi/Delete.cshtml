@@ -1,4 +1,4 @@
-﻿@model MAEPacchi.Models.Pacco
+﻿@model MAEPacchi.Models.Box
 
 @{
     ViewBag.Title = "Delete";
@@ -41,6 +41,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Note)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
         </dd>
 
         <dt>

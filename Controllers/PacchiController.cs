@@ -12,18 +12,33 @@ namespace MAEPacchi.Controllers
 {
     public class PacchiController : Controller
     {
-        private PaccoDBContext db = new PaccoDBContext();
+        private     BoxDBContext db = new BoxDBContext();
 
         // GET: Pacchi
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string deliveryType, string searchString)
         {
-            var pacchi = from m in db.Pacchi
+            //Type filter
+            var TypeLst = new List<string>();
+            var TypeQry = from d in db.Boxes
+                          orderby d.Type
+                          select d.Type;
+
+            TypeLst.AddRange(TypeQry.Distinct());
+            ViewBag.deliveryType = new SelectList(TypeLst);
+
+            var pacchi = from m in db.Boxes
                          select m;
 
+            //Parameter check
             if (!String.IsNullOrEmpty(searchString))
             {
                 pacchi = pacchi.Where(s => s.Sender.Contains(searchString));
             }
+            if (!string.IsNullOrEmpty(deliveryType))
+            {
+                pacchi = pacchi.Where(x => x.Type == deliveryType);
+            }
+
             return View(pacchi);
         }
 
@@ -34,7 +49,7 @@ namespace MAEPacchi.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pacco pacco = db.Pacchi.Find(id);
+            Box pacco = db.Boxes.Find(id);
             if (pacco == null)
             {
                 return HttpNotFound();
@@ -53,11 +68,11 @@ namespace MAEPacchi.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Sender,Recipient,Date,Note,Price")] Pacco pacco)
+        public ActionResult Create([Bind(Include = "ID,Sender,Recipient,Date,Note,Type,Price")] Box pacco)
         {
             if (ModelState.IsValid)
             {
-                db.Pacchi.Add(pacco);
+                db.Boxes.Add(pacco);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -72,7 +87,7 @@ namespace MAEPacchi.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pacco pacco = db.Pacchi.Find(id);
+            Box pacco = db.Boxes.Find(id);
             if (pacco == null)
             {
                 return HttpNotFound();
@@ -85,7 +100,7 @@ namespace MAEPacchi.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Sender,Recipient,Date,Note,Price")] Pacco pacco)
+        public ActionResult Edit([Bind(Include = "ID,Sender,Recipient,Date,Note,Type,Price")] Box pacco)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +118,7 @@ namespace MAEPacchi.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pacco pacco = db.Pacchi.Find(id);
+            Box pacco = db.Boxes.Find(id);
             if (pacco == null)
             {
                 return HttpNotFound();
@@ -116,8 +131,8 @@ namespace MAEPacchi.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Pacco pacco = db.Pacchi.Find(id);
-            db.Pacchi.Remove(pacco);
+            Box pacco = db.Boxes.Find(id);
+            db.Boxes.Remove(pacco);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
